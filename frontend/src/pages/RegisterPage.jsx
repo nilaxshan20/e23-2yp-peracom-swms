@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Footer from '../components/Footer'
 import styles from './RegisterPage.module.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function IW({  placeholder, type = 'text', value, onChange, required, showToggle, show, onToggle }) {
   return (
@@ -14,7 +15,7 @@ function IW({  placeholder, type = 'text', value, onChange, required, showToggle
         required={required} className={styles.input} />
       {showToggle && (
         <button type="button" className={styles.eyeBtn} onClick={onToggle}>
-          {show ? '🙈' : '👁️'}
+          {show ? <FaEyeSlash /> : <FaEye />}
         </button>
       )}
     </div>
@@ -133,14 +134,14 @@ export default function RegisterPage() {
 
           {role === 'student' && (<>
             <F label="Full Name">
-              <IW  placeholder="Full Name" value={student.fullName} onChange={e => setStudent(prev => ({...prev, fullName: e.target.value}))} required />
+              <IW  placeholder="e.g. John Doe" value={student.fullName} onChange={e => setStudent(prev => ({...prev, fullName: e.target.value}))} required />
             </F>
             <F label="Registration No">
-              <IW  placeholder="e.g. 2024/CS/001" value={student.registrationNo} onChange={e => setStudent(prev => ({...prev, registrationNo: e.target.value}))} required />
+              <IW  placeholder="e.g. E/xx/xxx" value={student.registrationNo} onChange={e => setStudent(prev => ({...prev, registrationNo: e.target.value}))} required />
             </F>
             <F label="Batch">
               <div className={styles.inputWrap}>
-                <span className={styles.inputIcon}>🎓</span>
+               
                 <select
                   className={styles.input}
                   value={student.batch}
