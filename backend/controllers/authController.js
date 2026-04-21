@@ -1,53 +1,70 @@
 import { supabase, supabaseAdmin } from '../config/supabaseClient.js'
 
 export const registerUser = async (req, res) => {
-   // 1. It extracts the details sent by the frontend
-  const { email, password, metadata } = req.body
-// 2. A quick safety check: did the frontend actually send the email and password?
+  // 1. Extract details sent by the frontend
+  const { email, password, metadata } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' })
+    return res.status(400).json({ error: 'Email and password are required.' });
   }
-// it tells Supabase to create the user's login credentials. 
-// The metadata is also sent to Supabase, which will store it in the user's profile and also make it available in the JWT token. 
-// This way, we can easily access the user's role and other info without needing to query the database every time.
+
+  // 2. Check Supabase Auth for existing email (confirmed or not)
+  const { data: userList, error: userListError } = await supabaseAdmin.auth.admin.listUsers();
+  if (userListError) {
+    console.error(userListError);
+    return res.status(500).json({ error: 'Error checking for existing user.' });
+  }
+  const existingUser = userList.users.find(u => u.email === email);
+  if (existingUser) {
+    return res.status(400).json({ error: 'This email is already registered. Please check your email for a confirmation link or log in.' });
+  }
+
+  // 3. Check profiles table for pending/approved email
+  const { data: profileRows, error: profileError } = await supabaseAdmin
+    .from('profiles')
+    .select('id, email, status')
+    .eq('email', email)
+    .in('status', ['pending_approval', 'approved']);
+  if (profileError) {
+    console.error(profileError);
+    return res.status(500).json({ error: 'Error checking for existing user profile.' });
+  }
+  if (profileRows && profileRows.length > 0) {
+    return res.status(400).json({ error: 'This email is already registered and pending approval or already approved.' });
+  }
+
+  // 4. Proceed with sign up
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: metadata || {}
     }
-  })
- // 4. Did Supabase reject it? (e.g., Email already taking)
+  });
   if (authError) {
-    return res.status(400).json({ error: authError.message })
+    return res.status(400).json({ error: authError.message });
   }
 
-  const role = metadata?.role || authData.user.user_metadata?.role || 'student'
-  const fullName = authData.user.user_metadata?.full_name || metadata?.full_name || null
-  const status = 'pending_approval'
-  const extraInfo = metadata && typeof metadata === 'object' ? metadata : {}
+  const role = metadata?.role || authData.user.user_metadata?.role || 'student';
+  const fullName = authData.user.user_metadata?.full_name || metadata?.full_name || null;
+  const status = 'pending_approval';
+  const extraInfo = metadata && typeof metadata === 'object' ? metadata : {};
 
-
-// 7. Save this specific user data into the "profiles" table
-  const { error: profileError } = await supabaseAdmin
+  // 5. Save this specific user data into the "profiles" table
+  const { error: profileInsertError } = await supabaseAdmin
     .from('profiles')
     .upsert({
-      id: authData.user.id,// Links this row to their login credentials
+      id: authData.user.id, // Links this row to their login credentials
       email: authData.user.email,
       full_name: fullName,
       role,
       status, // Saved as 'pending_approval'
       extra_info: extraInfo
-    }, { onConflict: 'id' })
+    }, { onConflict: 'id' });
 
-  if (profileError) {
-    return res.status(500).json({ error: 'Failed to create user profile.' })
+  if (profileInsertError) {
+    console.error(profileInsertError);
+    return res.status(500).json({ error: 'Failed to create user profile.' });
   }
-// 9. Send a "201 Created" success signal back to AuthContext.jsx, 
-// along with some user info (except password!)h.
-//  The frontend can use this info to show a success message or redirect the user.
-// reigster user function in uath context expects response
-
 
   return res.status(201).json({
     message: 'Registration successful! Please check your email to verify your account.',
@@ -57,7 +74,7 @@ export const registerUser = async (req, res) => {
       full_name: fullName,
       role
     }
-  })
+  });
 }
 
 export const loginUser = async (req, res) => {

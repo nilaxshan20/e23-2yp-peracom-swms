@@ -234,7 +234,7 @@ export default function RegisterPage() {
                     
                   </select>
                   <IW  type="tel" placeholder="Phone" value={student.phone} onChange={e => {
-                        const val = e.target.value.replace(/\D/g, ''); // Only digits
+                        const val = e.target.value.replace(/\D/g, ''); // Only digits ,removes all non-digit characters 
                         if (val.length <= 10) {
                           setStudent(prev => ({ ...prev, phone: val }));}}} 
                           required maxLength={10}  />
