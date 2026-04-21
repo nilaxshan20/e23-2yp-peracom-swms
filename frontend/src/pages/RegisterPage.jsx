@@ -133,10 +133,10 @@ export default function RegisterPage() {
 
           {role === 'student' && (<>
             <F label="Full Name">
-              <IW icon="👤" placeholder="Full Name" value={student.fullName} onChange={e => setStudent(prev => ({...prev, fullName: e.target.value}))} required />
+              <IW  placeholder="Full Name" value={student.fullName} onChange={e => setStudent(prev => ({...prev, fullName: e.target.value}))} required />
             </F>
             <F label="Registration No">
-              <IW icon="✉️" placeholder="e.g. 2024/CS/001" value={student.registrationNo} onChange={e => setStudent(prev => ({...prev, registrationNo: e.target.value}))} required />
+              <IW  placeholder="e.g. 2024/CS/001" value={student.registrationNo} onChange={e => setStudent(prev => ({...prev, registrationNo: e.target.value}))} required />
             </F>
             <F label="Batch">
               <div className={styles.inputWrap}>
@@ -159,63 +159,63 @@ export default function RegisterPage() {
             </F>
             <div className={styles.row2}>
               <F label="Email">
-                <IW icon="✉️" placeholder="Email" type="email" value={student.email} onChange={e => setStudent(prev => ({...prev, email: e.target.value}))} required />
+                <IW  placeholder="Email" type="email" value={student.email} onChange={e => setStudent(prev => ({...prev, email: e.target.value}))} required />
               </F>
               <F label="Phone">
-                <IW icon="📞" placeholder="Phone" value={student.phone} onChange={e => setStudent(prev => ({...prev, phone: e.target.value}))} />
+                <IW  placeholder="Phone" value={student.phone} onChange={e => setStudent(prev => ({...prev, phone: e.target.value}))} />
               </F>
             </div>
             <F label="Password">
-              <IW icon="🔒" placeholder="Password" value={student.password} onChange={e => setStudent(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
+              <IW  placeholder="Password" value={student.password} onChange={e => setStudent(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
             </F>
             <F label="Confirm Password">
-              <IW icon="🔒" placeholder="Confirm password" value={student.confirm} onChange={e => setStudent(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
+              <IW  placeholder="Confirm password" value={student.confirm} onChange={e => setStudent(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
             </F>
           </>)}
 
           {role === 'donor' && (<>
             <F label="Donor/Organization Name">
-              <IW icon="👤" placeholder="Donor or Organization Name" value={donor.donorName} onChange={e => setDonor(prev => ({...prev, donorName: e.target.value}))} required />
+              <IW  placeholder="Donor or Organization Name" value={donor.donorName} onChange={e => setDonor(prev => ({...prev, donorName: e.target.value}))} required />
             </F>
             <F label="Email">
-              <IW icon="✉️" placeholder="Email" type="email" value={donor.email} onChange={e => setDonor(prev => ({...prev, email: e.target.value}))} required />
+              <IW  placeholder="Email" type="email" value={donor.email} onChange={e => setDonor(prev => ({...prev, email: e.target.value}))} required />
             </F>
             <div className={styles.row2}>
               <F label="Phone">
-                <IW icon="✉️" placeholder="Phone" value={donor.phone} onChange={e => setDonor(prev => ({...prev, phone: e.target.value}))} required />
+                <IW  placeholder="Phone" value={donor.phone} onChange={e => setDonor(prev => ({...prev, phone: e.target.value}))} required />
               </F>
               <F label="Organization">
-                <IW icon="📞" placeholder="Organization" value={donor.orgName} onChange={e => setDonor(prev => ({...prev, orgName: e.target.value}))} />
+                <IW  placeholder="Organization" value={donor.orgName} onChange={e => setDonor(prev => ({...prev, orgName: e.target.value}))} />
               </F>
             </div>
             <F label="Password">
-              <IW icon="🔒" placeholder="Password" value={donor.password} onChange={e => setDonor(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
+              <IW  placeholder="Password" value={donor.password} onChange={e => setDonor(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
             </F>
             <F label="Confirm Password">
-              <IW icon="🔒" placeholder="Confirm password" value={donor.confirm} onChange={e => setDonor(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
+              <IW  placeholder="Confirm password" value={donor.confirm} onChange={e => setDonor(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
             </F>
           </>)}
 
           {role === 'admin' && (<>
             <F label="Full Name">
-              <IW icon="👤" placeholder="Full Name" value={admin.fullName} onChange={e => setAdmin(prev => ({...prev, fullName: e.target.value}))} required />
+              <IW placeholder="Full Name" value={admin.fullName} onChange={e => setAdmin(prev => ({...prev, fullName: e.target.value}))} required />
             </F>
             <div className={styles.row2}>
               <F label="Staff ID">
-                <IW icon="🪪" placeholder="STF-0001" value={admin.staffId} onChange={e => setAdmin(prev => ({...prev, staffId: e.target.value}))} required />
+                <IW placeholder="STF-0001" value={admin.staffId} onChange={e => setAdmin(prev => ({...prev, staffId: e.target.value}))} required />
               </F>
               <F label="Department">
-                <IW icon="🏛️" placeholder="Department" value={admin.department} onChange={e => setAdmin(prev => ({...prev, department: e.target.value}))} required />
+                <IW placeholder="Department" value={admin.department} onChange={e => setAdmin(prev => ({...prev, department: e.target.value}))} required />
               </F>
             </div>
             <F label="Email">
-              <IW icon="✉️" placeholder="admin@university.lk" type="email" value={admin.email} onChange={e => setAdmin(prev => ({...prev, email: e.target.value}))} required />
+              <IW placeholder="admin@university.lk" type="email" value={admin.email} onChange={e => setAdmin(prev => ({...prev, email: e.target.value}))} required />
             </F>
             <F label="Password">
-              <IW icon="🔒" placeholder="Password" value={admin.password} onChange={e => setAdmin(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
+              <IW placeholder="Password" value={admin.password} onChange={e => setAdmin(prev => ({...prev, password: e.target.value}))} required showToggle show={showPw} onToggle={() => setShowPw(p => !p)} />
             </F>
             <F label="Confirm Password">
-              <IW icon="🔒" placeholder="Confirm password" value={admin.confirm} onChange={e => setAdmin(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
+              <IW placeholder="Confirm password" value={admin.confirm} onChange={e => setAdmin(prev => ({...prev, confirm: e.target.value}))} required showToggle show={showCpw} onToggle={() => setShowCpw(p => !p)} />
             </F>
           </>)}
 
