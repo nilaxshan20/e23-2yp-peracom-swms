@@ -14,7 +14,7 @@ function getPasswordStrength(password) {
 }
 
 function IW({  placeholder, type = 'text', value, onChange, required, 
-  showToggle, show, onToggle, showStrength, matchWith }) {
+  showToggle, show, onToggle, showStrength, matchWith ,  maxLength }) {
   const strength = showStrength ? getPasswordStrength(value) : null;
   const match = matchWith !== undefined ? value === matchWith : null;
   return (
@@ -45,6 +45,7 @@ function IW({  placeholder, type = 'text', value, onChange, required,
           {match ? 'Passwords match' : 'Passwords do not match'}
         </div>
       )}
+      maxLength={maxLength}
     </div>
   )
 }
@@ -72,6 +73,7 @@ export default function RegisterPage() {
   const [admin, setAdmin] = useState({ fullName: '', staffId: '', department: '', email: '', password: '', confirm: '' })
   const [registered, setRegistered] = useState(false)
   const [registeredRole, setRegisteredRole] = useState('')
+  const [countryCode, setCountryCode] = useState('+94');
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -189,7 +191,23 @@ export default function RegisterPage() {
                 <IW  placeholder="Email" type="email" value={student.email} onChange={e => setStudent(prev => ({...prev, email: e.target.value}))} required />
               </F>
               <F label="Phone">
-                <IW  placeholder="Phone" value={student.phone} onChange={e => setStudent(prev => ({...prev, phone: e.target.value}))} />
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <select
+                    value={countryCode}
+                    onChange={e => setCountryCode(e.target.value)}
+                    style={{ width: '5rem' }}
+                  >
+                    <option value="+94">+94 (LK)</option>
+                    <option value="+91">+91 (IN)</option>
+                    <option value="+1">+1 (US)</option>
+                    {/* Add more as needed */}
+                  </select>
+                  <IW  type="tel" placeholder="Phone" value={student.phone} onChange={e => {
+                        const val = e.target.value.replace(/\D/g, ''); // Only digits
+                        if (val.length <= 10) {
+                          setStudent(prev => ({ ...prev, phone: val }));}}} 
+                          required maxLength={10}  />
+                </div>
               </F>
             </div>
             <F label="Password">
@@ -209,10 +227,22 @@ export default function RegisterPage() {
             </F>
             <div className={styles.row2}>
               <F label="Phone">
-                <IW  placeholder="Phone" value={donor.phone} onChange={e => setDonor(prev => ({...prev, phone: e.target.value}))} required />
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <select
+                    value={countryCode}
+                    onChange={e => setCountryCode(e.target.value)}
+                    style={{ width: '5rem' }}
+                  >
+                    <option value="+94">+94 (LK)</option>
+                    <option value="+91">+91 (IN)</option>
+                    <option value="+1">+1 (US)</option>
+                    {/* Add more as needed */}
+                  </select>
+                  <IW  type="tel" placeholder="Phone" value={donor.phone} onChange={e => setDonor(prev => ({...prev, phone: e.target.value}))} required  maxLength={10} />
+                </div>
               </F>
               <F label="Organization">
-                <IW  placeholder="Organization" value={donor.orgName} onChange={e => setDonor(prev => ({...prev, orgName: e.target.value}))} />
+                <IW  placeholder="Organization" value={donor.orgName} onChange={e => setDonor(prev => ({...prev, orgName: e.target.value}))} required />
               </F>
             </div>
             <F label="Password">
@@ -236,6 +266,7 @@ export default function RegisterPage() {
               </F>
             </div>
             <F label="Email">
+               
               <IW placeholder="admin@university.lk" type="email" value={admin.email} onChange={e => setAdmin(prev => ({...prev, email: e.target.value}))} required />
             </F>
             <F label="Password">
@@ -247,7 +278,7 @@ export default function RegisterPage() {
           </>)}
 {/* The button is disabled if loading, any required field is empty,
  the password is not strong, or the passwords do not match */}
- 
+
           <button className={styles.submitBtn} disabled={
             loading ||
             !student.fullName ||
