@@ -43,13 +43,23 @@ function ApprovedStudents() {
 
   const batchOptions = useMemo(() => {
     const batches = [...new Set(students.map((s) => s.batch).filter(Boolean))];
-    return [{ value: 'all', label: 'All Batches' }, ...batches.map((b) => ({ value: b, label: b }))];
+    return [
+      { value: 'all', label: 'All Batches' },
+      { value: 'undergraduate', label: 'Undergraduates' },
+      { value: 'postgraduate', label: 'Postgraduates' },
+      ...batches.map((b) => ({ value: b, label: b })),
+    ];
   }, [students]);
 
   const filtered = useMemo(() => students.filter((student) => {
     const name = (student.student_name || student.full_name || '').toLowerCase();
     const matchesSearch = name.includes(search.toLowerCase()) || (student.registration_no || '').toLowerCase().includes(search.toLowerCase());
-    const matchesBatch = batchFilter === 'all' || student.batch === batchFilter;
+    const batchValue = (student.batch || '').toLowerCase();
+    const matchesBatch =
+      batchFilter === 'all'
+      || (batchFilter === 'undergraduate' && (batchValue.includes('under') || batchValue.includes('ug')))
+      || (batchFilter === 'postgraduate' && (batchValue.includes('post') || batchValue.includes('pg')))
+      || student.batch === batchFilter;
     const scholarship = student.scholarship_title || student.scholarship_name || '';
     const matchesScholarship = scholarshipFilter === 'all' || scholarship === scholarshipFilter;
     return matchesSearch && matchesBatch && matchesScholarship;
